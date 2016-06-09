@@ -1,5 +1,5 @@
 FROM debian:8
-MAINTAINER Eduardo Silva <zedudu@gmail.com>
+MAINTAINER Danny Lloyd <dlloyd.cda@gmail.com>
 
 RUN apt-get update && apt-get install -y  \
     autoconf \
@@ -49,7 +49,7 @@ RUN cd /opt && \
     cd /opt/kaldi/src/online && make depend && make && \
     cd /opt/kaldi/src/gst-plugin && make depend && make && \
     cd /opt && \
-    git clone https://github.com/alumae/gst-kaldi-nnet2-online.git && \
+    git clone https://github.com/skoocda/gst-kaldi-nnet2-online.git && \
     cd /opt/gst-kaldi-nnet2-online/src && \
     sed -i '/KALDI_ROOT?=\/home\/tanel\/tools\/kaldi-trunk/c\KALDI_ROOT?=\/opt\/kaldi' Makefile && \
     make depend && make && \
@@ -59,9 +59,9 @@ RUN cd /opt && \
     rm -rf /opt/kaldi/egs/ /opt/kaldi/windows/ /opt/kaldi/misc/ && \
     find /opt/kaldi/src/ -type f -not -name '*.so' -delete && \
     find /opt/kaldi/tools/ -type f \( -not -name '*.so' -and -not -name '*.so*' \) -delete && \
-    cd /opt && git clone https://github.com/alumae/kaldi-gstreamer-server.git && \
+    cd /opt && git clone https://github.com/skoocda/kaldi-gstreamer-server.git && \
     rm -rf /opt/kaldi-gstreamer-server/.git/ && \
-    rm -rf /opt/kaldi-gstreamer-server/test/
+    rm -rf /opt/kaldi-gstreamer-server/test/data/
 
 COPY start.sh stop.sh /opt/
 
