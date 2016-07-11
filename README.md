@@ -13,9 +13,9 @@ Attention
 
 The ASR server that will be set up here requires some [kaldi models](http://www.kaldi.org). In the docker image I will detail below, there are no kaldi models included.
 
-You must have these models on your machine. You must also have an yaml file describing these models. Please, check some examples [here](https://github.com/alumae/kaldi-gstreamer-server/blob/master/sample_worker.yaml), [here](https://github.com/alumae/kaldi-gstreamer-server/blob/master/estonian_worker.yaml) and [here](https://github.com/alumae/kaldi-gstreamer-server/blob/master/sample_english_nnet2.yaml) to find out how to write your own yaml files.
+You must have these models on your machine. You must also have an yaml file describing these models. Please, check the examples [here](https://github.com/alumae/kaldi-gstreamer-server/blob/master/sample_worker.yaml), [here](https://github.com/alumae/kaldi-gstreamer-server/blob/master/estonian_worker.yaml) and [here](https://github.com/alumae/kaldi-gstreamer-server/blob/master/sample_english_nnet2.yaml) to find out how to write your own yaml files.
 
-There are some kaldi models available for download. I have tested my setup with this [one](https://phon.ioc.ee/~tanela/tedlium_nnet_ms_sp_online.tgz), which is for English. I'm trying to build a model for Brazilian Portuguese, but until now I didn't find enough free/open resources.
+There are some kaldi models available for download. I have tested my setup with this [one](https://phon.ioc.ee/~tanela/tedlium_nnet_ms_sp_online.tgz), which is for English.
 
 
 Install docker
@@ -35,7 +35,7 @@ Get the image
 
 `docker build -t kaldi-gstreamer-server:1.0 https://github.com/skoocda/docker-kaldi-gstreamer-server`
 
-In the next sections I'll assume you pulled the image from Docker Hub. If you have built your own image, simply change *jcsilva/docker-kaldi-gstreamer-server:latest* by your image name when appropriate.
+In the next sections I'll assume you pulled the image from Docker Hub. If you have built your own image, simply change *skoocda/docker-kaldi-gstreamer-server:latest* by your image name when appropriate.
 
 
 How to use
@@ -48,7 +48,7 @@ It's possible to use the same docker in two scenarios. You may create the master
 Assuming that your kaldi models are located at /media/kaldi_models on your host machine, create a container:
 
 ```
-docker run -it -p 8080:80 -v /media/kaldi_models:/opt/models jcsilva/docker-kaldi-gstreamer-server:latest /bin/bash
+docker run -it -p 8080:80 -v /media/kaldi_models:/opt/models skoocda/docker-kaldi-gstreamer-server:latest /bin/bash
 ```
 
 And, inside the container, start the service:
@@ -69,7 +69,7 @@ For stopping the servers, you may execute the following command inside your cont
 Assuming that your kaldi models are located at /media/kaldi_models on your host machine, create a container:
 
 ```
-docker run -it -v /media/kaldi_models:/opt/models jcsilva/docker-kaldi-gstreamer-server:latest /bin/bash
+docker run -it -v /media/kaldi_models:/opt/models skoocda/docker-kaldi-gstreamer-server:latest /bin/bash
 ```
 
 And, inside the container, start the service:
