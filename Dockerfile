@@ -1,7 +1,10 @@
 FROM ubuntu:16.04
 MAINTAINER Danny Lloyd <dlloyd.cda@gmail.com>
 
-RUN apt-get update && apt-get install -y  \
+COPY start.sh stop.sh /opt/
+
+RUN apt-get update && \
+    apt-get install -y  \
     autoconf \
     automake \
     bzip2 \
@@ -29,9 +32,8 @@ RUN apt-get update && apt-get install -y  \
     apt-get autoremove -y && \
     pip install ws4py==0.3.2 && \
     pip install tornado && \
-    ln -s /usr/bin/python2.7 /usr/bin/python ; ln -s -f bash /bin/sh
-
-RUN cd /opt && wget http://www.digip.org/jansson/releases/jansson-2.7.tar.bz2 && \
+    ln -s /usr/bin/python2.7 /usr/bin/python ; ln -s -f bash /bin/sh && \
+    cd /opt && wget http://www.digip.org/jansson/releases/jansson-2.7.tar.bz2 && \
     bunzip2 -c jansson-2.7.tar.bz2 | tar xf -  && \
     cd jansson-2.7 && \
     ./configure && make && \
@@ -39,9 +41,8 @@ RUN cd /opt && wget http://www.digip.org/jansson/releases/jansson-2.7.tar.bz2 &&
     make install && \
     echo "/usr/local/lib" >> /etc/ld.so.conf.d/jansson.conf && \
     ldconfig && \
-    rm /opt/jansson-2.7.tar.bz2 && rm -rf /opt/jansson-2.7
-
-RUN cd /opt && \
+    rm /opt/jansson-2.7.tar.bz2 && rm -rf /opt/jansson-2.7 && \
+    cd /opt && \
     git clone https://github.com/kaldi-asr/kaldi && \
     cd /opt/kaldi/tools && \
     make && \
@@ -54,10 +55,10 @@ RUN cd /opt && \
     make && \
     cd /opt/kaldi/src/gst-plugin && \
     make depend && \
-    make
-
-RUN cd /opt && \
+    make && \
+    cd /opt && \
     git clone https://github.com/skoocda/gst-kaldi-nnet2-online.git && \
+    rm -rf /opt/gst-kaldi-nnet2-online/demo && \
     cd /opt/gst-kaldi-nnet2-online/src && \
     sed -i '/KALDI_ROOT?=\/home\/tanel\/tools\/kaldi-trunk/c\KALDI_ROOT?=\/opt\/kaldi' Makefile && \
     make depend && \
@@ -67,14 +68,11 @@ RUN cd /opt && \
     rm -rf /opt/kaldi/.git && \
     rm -rf /opt/kaldi/egs/ /opt/kaldi/windows/ /opt/kaldi/misc/ && \
     find /opt/kaldi/src/ -type f -not -name '*.so' -delete && \
-    find /opt/kaldi/tools/ -type f \( -not -name '*.so' -and -not -name '*.so*' \) -delete
-
-RUN cd /opt && \
+    find /opt/kaldi/tools/ -type f \( -not -name '*.so' -and -not -name '*.so*' \) -delete && \
+    cd /opt && \
     git clone https://github.com/skoocda/kaldi-gstreamer-server.git && \
     rm -rf /opt/kaldi-gstreamer-server/.git/ && \
-    rm -rf /opt/kaldi-gstreamer-server/test/data/
-
-COPY start.sh stop.sh /opt/
-
-RUN chmod +x /opt/start.sh && \
+    rm -rf /opt/kaldi-gstreamer-server/test/models/english/voxforge && \
+    rm -rf /opt/kaldi-gstreamer-server/test/data/ && \
+    chmod +x /opt/start.sh && \
     chmod +x /opt/stop.sh
